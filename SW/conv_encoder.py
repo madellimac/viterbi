@@ -15,9 +15,9 @@ class conv_encoder(Py_Module):
 			SR[0] = r_in[0, i]
 			r_out[0, 2*i] = np.mod(np.sum(np.multiply(SR, poly1)), 2)
 			r_out[0, 2*i+1] = np.mod(np.sum(np.multiply(SR, poly2)), 2)
-			print(SR)
+			# print(SR)
 			
-		print(r_out)
+		# print(r_out)
 		return 0
 
 	def __init__(self, K, N):

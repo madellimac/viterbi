@@ -14,7 +14,7 @@ class viterbi_decoder(Py_Module):
 		BM[2,:] =  r_in[0, 0:self.N:2] - r_in[0, 1:self.N:2] + 6
 		BM[1,:] = -r_in[0, 0:self.N:2] + r_in[0, 1:self.N:2] + 6
 		BM[0,:] = -r_in[0, 0:self.N:2] - r_in[0, 1:self.N:2] + 6
-		print("BM =\n", BM)
+		# print("BM =\n", BM)
 		# state metrics
 		N_state = 8
 		SM = np.zeros((N_state, self.K+1), dtype = np.float32)
@@ -52,27 +52,24 @@ class viterbi_decoder(Py_Module):
 				r_out[0, i-1] = 0
 			else:
 				r_out[0, i-1] = 1
-			print(current_state)
+			# print(current_state)
 			current_state = path[current_state, i]
 
-		"""r_out_tmp = np.zeros(shape=(8, self.K), dtype=np.int32)
+		"""path_tmp = np.zeros(shape=(8, self.K), dtype=np.int32)
 		for j in range(0, 8):
 			current_state = j
 			for i in range(self.K, 0, -1):
-				if current_state < 4:
-					r_out_tmp[j, i - 1] = 0
-				else:
-					r_out_tmp[j, i - 1] = 1
+				path_tmp[j, i - 1] = path[current_state, i]
 				current_state = path[current_state, i]
-			print("r_out", j, "=", r_out_tmp[j])
+			# print("r_out", j, "=", r_out_tmp[j])
 
 		for i in range(self.K-1, -1, -1):
-			if r_out_tmp[0, i] == r_out_tmp[1, i] and r_out_tmp[0, i] == r_out_tmp[2, i] and r_out_tmp[0, i] == r_out_tmp[3, i] and r_out_tmp[0, i] == r_out_tmp[4, i] and r_out_tmp[0, i] == r_out_tmp[5, i] and r_out_tmp[0, i] == r_out_tmp[6, i] and r_out_tmp[0, i] == r_out_tmp[7, i]:
+			if path_tmp[0, i] == path_tmp[1, i] and path_tmp[0, i] == path_tmp[2, i] and path_tmp[0, i] == path_tmp[3, i] and path_tmp[0, i] == path_tmp[4, i] and path_tmp[0, i] == path_tmp[5, i] and path_tmp[0, i] == path_tmp[6, i] and path_tmp[0, i] == path_tmp[7, i]:
 				print("Converge après", i)
 				break"""
 
-		print("SM =\n", SM)
-		print("path=\n", path)
+		# print("SM =\n", SM)
+		# print("path=\n", path)
 		return 0
     
 	def __init__(self, K, N):
