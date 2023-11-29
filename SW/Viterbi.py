@@ -1,5 +1,4 @@
 import sys
-sys.path.insert(0, '../py_aff3ct/build/lib')
 import py_aff3ct as aff3ct
 from py_aff3ct.module.py_module import Py_Module
 
