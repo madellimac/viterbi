@@ -4,7 +4,7 @@ module tb_top_level_decoder();
 
     logic clk;
     logic rstn;
-    logic [5:0] rxsig;
+    logic rxsig;
     
     logic tx;
 
@@ -34,8 +34,30 @@ module tb_top_level_decoder();
     // Other
     initial begin
         rstn = 1'b0;
+        rxsig = 1'b1;
+        repeat(20)   @(posedge clk); // 1449 cycles -> 9600 bauds
+        rstn = 1'b1;
+        repeat(10)   @(posedge clk); // 1449 cycles -> 9600 bauds
         
-        repeat(1449) @(posedge clk); // 1449 cycles -> 9600 Hz
+        
+        repeat(10) @(posedge clk) begin
+            repeat(1449) @(posedge clk); // 1449 cycles -> 9600 bauds
+            rxsig = 1'b0; // start
+            repeat(1449) @(posedge clk); // 1449 cycles -> 9600 bauds
+            rxsig = 1'b1; // 1
+            repeat(1449) @(posedge clk); // 1449 cycles -> 9600 bauds
+            rxsig = 1'b1;
+            repeat(1449) @(posedge clk); // 1449 cycles -> 9600 bauds
+            rxsig = 1'b1;
+            repeat(1449) @(posedge clk); // 1449 cycles -> 9600 bauds
+            rxsig = 1'b1;
+            repeat(1449) @(posedge clk); // 1449 cycles -> 9600 bauds
+            rxsig = 1'b1; // 6
+            repeat(1449) @(posedge clk); // 1449 cycles -> 9600 bauds
+            rxsig = 1'b0; // stop
+            repeat(1449) @(posedge clk); // 1449 cycles -> 9600 bauds
+            rxsig = 1'b1; // idle
+            repeat(10000) @(posedge clk); // 1449 cycles -> 9600 bauds
+        end
     end
-
 endmodule
