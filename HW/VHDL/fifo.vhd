@@ -28,7 +28,8 @@ begin
     begin
         if(rst='1') then
 				reg <= (others => '0');
-		  elsif (CLK'event and CLK = '1') then            
+		  elsif (CLK'event and CLK = '1') then
+		  
 				reg(0) <= data_in;
 				reg(1) <= reg(0);
 				reg(2) <= reg(1);
