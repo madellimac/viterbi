@@ -35,7 +35,7 @@ module tb_top_level_decoder();
     initial begin
         rstn = 1'b0;
         
-        repeat() @ posedge(clk)
-
+        repeat(1449) @(posedge clk); // 1449 cycles -> 9600 Hz
+    end
 
 endmodule
