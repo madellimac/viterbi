@@ -5,36 +5,43 @@ from py_aff3ct.module.py_module import Py_Module
 from conv_encoder import conv_encoder
 from viterbi_decoder import viterbi_decoder
 from quantizer import quantizer
+from viterbi_splitter import viterbi_splitter
 
 import numpy as np
 import math
 import time
 import matplotlib.pyplot as plt
 
-K = 2048
+K = 512
 N = 2*K
+A = 4   # Longueur de contrainte (K)
+B = 6*A # Longueur max de convergence
+C = 2*B
+
 ebn0_min = 0
-ebn0_max = 12
-ebn0_step = 0.5
+ebn0_max = 6
+ebn0_step = 0.2
 
 ebn0 = np.arange(ebn0_min, ebn0_max, ebn0_step)
-# print("ebn0 =", ebn0)
-esn0 = ebn0 + 10 * math.log10(K/N)
+esn0 = ebn0 + 10 * math.log10((K + B)/(N + C))
 sigma_vals = 1/(math.sqrt(2) * 10 ** (esn0 / 20))
 
-src = aff3ct.module.source.Source_random_fast(K, 12)
+src = aff3ct.module.source.Source_random_fast(K + B, 12)
 
-cc_enc = conv_encoder(K, N)
-vit_dec = viterbi_decoder(K, N)
-qtz = quantizer(N, )
+cc_enc = conv_encoder(K + B, N + C)
+vit_dec = viterbi_decoder(K + B, N + C)
+qtz = quantizer(N + C, )
 
-mdm = aff3ct.module.modem.Modem_BPSK_fast(N)
+mdm = aff3ct.module.modem.Modem_BPSK_fast(N + C)
 gen = aff3ct.tools.Gaussian_noise_generator_implem.FAST
-chn = aff3ct.module.channel.Channel_AWGN_LLR(N, gen)
-mnt = aff3ct.module.monitor.Monitor_BFER_AR(K, 100)
+chn = aff3ct.module.channel.Channel_AWGN_LLR(N + C, gen)
+mnt = aff3ct.module.monitor.Monitor_BFER_AR(K, 50)
+
+src_trunc = viterbi_splitter(A, K + B)
+dec_trunc = viterbi_splitter(A, K + B)
 
 sigma = np.ndarray(shape = (1,1),  dtype = np.float32)
-# sigma[:] = sigma_vals[0]
+# sigma[:] = sigma_vals
 # print(sigma)
 chn["add_noise    ::CP  "].bind(sigma)
 mdm["demodulate ::CP  "].bind(sigma)
@@ -47,8 +54,11 @@ chn    ["add_noise  ::Y_N   "] = mdm     ["demodulate   :: Y_N1 "]
 mdm    ["demodulate ::Y_N2  "] = qtz     ["quantize     :: r_in "]
 qtz    ["quantize   ::r_out "] = vit_dec ["decode       :: r_in "]
 
-src    ["generate   ::U_K   "] = mnt     ["check_errors :: U    "]
-vit_dec["decode     ::r_out "] = mnt     ["check_errors :: V    "]
+src      ['generate::U_K'] = src_trunc['split::r_in']
+src_trunc['split::r_out']  = mnt      ['check_errors::U']
+
+vit_dec  ['decode::r_out'] = dec_trunc ['split::r_in']
+dec_trunc['split::r_out']  = mnt       ['check_errors::V']
 
 fer = np.zeros(len(ebn0))
 ber = np.zeros(len(ebn0))
@@ -74,6 +84,8 @@ for i in range(len(sigma_vals)):
         qtz["quantize"].exec()
         vit_dec["decode"].exec()
         mnt["check_errors"].exec()
+        src_trunc['split'].exec()
+        dec_trunc['split'].exec()
 
     # calculate the simulation throughput
     elapsed = time.time() - t
@@ -88,12 +100,13 @@ for i in range(len(sigma_vals)):
     print("%11.2f | %12d | %7.2e | %7.2e | %10.2f" % (ebn0[i], total_fra, ber[i], fer[i], tpt))
 
 fig = plt.figure()
-plt.title("16-QAM BER/FER vs Eb/N0")
+plt.title("Viterbi BER/FER vs Eb/N0")
 plt.xlabel("Eb/N0")
 plt.ylabel("BER/FER")
 plt.grid()
 plt.semilogy(ebn0, fer, 'r-', ebn0, ber, 'b--')
 plt.show()
+
 
 # print("src = ", src    ["generate   ::U_K   "][:])
 # print("enc out = ", cc_enc ["encode     ::r_out "][:])
@@ -105,7 +118,10 @@ plt.show()
 # print("dec in = ", vit_dec["decode     ::r_in "][:])
 # print("dec out = ", vit_dec["decode     ::r_out "][:])
 #seq  = aff3ct.tools.sequence.Sequence(src["generate"], mdm["modulate"], 1)
- 
+
+
+# print("src trunc     = ", src_trunc)
+# print("dec out trunc = ", r_out_trunc)
 #seq.exec()
 
 #bits = cc_enc['encode::r_out'][:]
