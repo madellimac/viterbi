@@ -6,6 +6,7 @@ from conv_encoder import conv_encoder
 from viterbi_decoder import viterbi_decoder
 from quantizer import quantizer
 from viterbi_splitter import viterbi_splitter
+from viterbi_serial import viterbi_serial
 
 import numpy as np
 import math
@@ -40,12 +41,14 @@ mnt = aff3ct.module.monitor.Monitor_BFER_AR(K, 50)
 src_trunc = viterbi_splitter(A, K + B)
 dec_trunc = viterbi_splitter(A, K + B)
 
+vit_serial = viterbi_serial(A, K + B)
+
 sigma = np.ndarray(shape = (1,1),  dtype = np.float32)
 # sigma[:] = sigma_vals
 # print(sigma)
-chn["add_noise    ::CP  "].bind(sigma)
-mdm["demodulate ::CP  "].bind(sigma)
-qtz["quantize :: cp"].bind(sigma)
+chn["add_noise ::CP"].bind(sigma)
+mdm["demodulate::CP"].bind(sigma)
+qtz["quantize  ::cp"].bind(sigma)
 
 src    ["generate   ::U_K   "] = cc_enc  ["encode       :: r_in "]
 cc_enc ["encode     ::r_out "] = mdm     ["modulate     :: X_N1 "]
@@ -53,6 +56,7 @@ mdm    ["modulate   ::X_N2  "] = chn     ["add_noise    :: X_N  "]
 chn    ["add_noise  ::Y_N   "] = mdm     ["demodulate   :: Y_N1 "]
 mdm    ["demodulate ::Y_N2  "] = qtz     ["quantize     :: r_in "]
 qtz    ["quantize   ::r_out "] = vit_dec ["decode       :: r_in "]
+qtz    ["quantize   ::r_out "] = vit_serial ["send         :: r_in "]
 
 src      ['generate::U_K'] = src_trunc['split::r_in']
 src_trunc['split::r_out']  = mnt      ['check_errors::U']
@@ -83,6 +87,7 @@ for i in range(len(sigma_vals)):
         mdm["demodulate"].exec()
         qtz["quantize"].exec()
         vit_dec["decode"].exec()
+        vit_dec["send"].exec()
         mnt["check_errors"].exec()
         src_trunc['split'].exec()
         dec_trunc['split'].exec()
