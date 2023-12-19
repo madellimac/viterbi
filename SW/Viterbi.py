@@ -41,7 +41,7 @@ mnt = aff3ct.module.monitor.Monitor_BFER_AR(K, 50)
 src_trunc = viterbi_splitter(A, K + B)
 dec_trunc = viterbi_splitter(A, K + B)
 
-vit_serial = viterbi_serial(A, K + B)
+vit_serial = viterbi_serial(A, N + C)
 
 sigma = np.ndarray(shape = (1,1),  dtype = np.float32)
 # sigma[:] = sigma_vals
@@ -87,7 +87,7 @@ for i in range(len(sigma_vals)):
         mdm["demodulate"].exec()
         qtz["quantize"].exec()
         vit_dec["decode"].exec()
-        vit_dec["send"].exec()
+        vit_serial["send"].exec()
         mnt["check_errors"].exec()
         src_trunc['split'].exec()
         dec_trunc['split'].exec()
