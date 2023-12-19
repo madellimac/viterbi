@@ -13,7 +13,7 @@ import math
 import time
 import matplotlib.pyplot as plt
 
-K = 512
+K = 10
 N = 2*K
 A = 4   # Longueur de contrainte (K)
 B = 6*A # Longueur max de convergence
@@ -87,7 +87,7 @@ for i in range(len(sigma_vals)):
         mdm["demodulate"].exec()
         qtz["quantize"].exec()
         vit_dec["decode"].exec()
-        vit_serial["send"].exec()
+        #vit_serial["send"].exec()
         mnt["check_errors"].exec()
         src_trunc['split'].exec()
         dec_trunc['split'].exec()
@@ -112,8 +112,19 @@ plt.grid()
 plt.semilogy(ebn0, fer, 'r-', ebn0, ber, 'b--')
 plt.show()
 
+#src["generate"].exec()
+#cc_enc["encode"].exec()
+#mdm["modulate"].exec()
+#chn["add_noise"].exec()
+#mdm["demodulate"].exec()
+#qtz["quantize"].exec()
+#vit_dec["decode"].exec()
+#vit_serial["send"].exec()
+#mnt["check_errors"].exec()
+#src_trunc['split'].exec()
+#dec_trunc['split'].exec()
 
-# print("src = ", src    ["generate   ::U_K   "][:])
+print("src = ", src    ["generate   ::U_K   "][:])
 # print("enc out = ", cc_enc ["encode     ::r_out "][:])
 # print("mod out = ", mdm    ["modulate   ::X_N2  "][:])
 # print("chn out = ", chn    ["add_noise  ::Y_N   "][:])
@@ -121,7 +132,7 @@ plt.show()
 # print("qtz in = ", qtz    ["quantize ::r_in  "][:])
 # print("qtz out = ", qtz    ["quantize ::r_out  "][:])
 # print("dec in = ", vit_dec["decode     ::r_in "][:])
-# print("dec out = ", vit_dec["decode     ::r_out "][:])
+print("dec out = ", vit_dec["decode     ::r_out "][:])
 #seq  = aff3ct.tools.sequence.Sequence(src["generate"], mdm["modulate"], 1)
 
 
