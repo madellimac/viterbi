@@ -15,14 +15,14 @@
 
 // PROGRAM		"Quartus Prime"
 // VERSION		"Version 22.1std.2 Build 922 07/20/2023 SC Lite Edition"
-// CREATED		"Tue Dec 19 10:11:59 2023"
+// CREATED		"Tue Dec 19 10:41:32 2023"
 
 module uart_test(
 	CLK,
 	RSTN,
 	RXSIG,
-	from_1st_to_2nd,
-	from_2nd_to_PC,
+	from_first_to_second,
+	from_second_to_PC,
 	TXSIG,
 	full_first_fifo,
 	empty_first_fifo,
@@ -35,8 +35,8 @@ module uart_test(
 input wire	CLK;
 input wire	RSTN;
 input wire	RXSIG;
-input wire	from_1st_to_2nd;
-input wire	from_2nd_to_PC;
+input wire	from_first_to_second;
+input wire	from_second_to_PC;
 output wire	TXSIG;
 output wire	full_first_fifo;
 output wire	empty_first_fifo;
@@ -44,12 +44,12 @@ output wire	full_second_fifo;
 output wire	empty_second_fifo;
 output wire	rx_valid;
 
-wire	1st_not_empty;
-wire	1st_not_full;
-wire	2nd_not_empty;
-wire	2nd_not_full;
+wire	first_not_empty;
+wire	first_not_full;
 wire	rst;
 wire	rxvalid;
+wire	second_not_empty;
+wire	second_not_full;
 wire	tx_ready;
 wire	un;
 wire	zero;
@@ -57,15 +57,13 @@ wire	SYNTHESIZED_WIRE_0;
 wire	SYNTHESIZED_WIRE_1;
 wire	SYNTHESIZED_WIRE_2;
 wire	SYNTHESIZED_WIRE_3;
-wire	SYNTHESIZED_WIRE_4;
-wire	[7:0] SYNTHESIZED_WIRE_5;
+wire	[7:0] SYNTHESIZED_WIRE_4;
+wire	SYNTHESIZED_WIRE_5;
 wire	SYNTHESIZED_WIRE_6;
-wire	SYNTHESIZED_WIRE_7;
+wire	[7:0] SYNTHESIZED_WIRE_7;
 wire	SYNTHESIZED_WIRE_8;
-wire	[7:0] SYNTHESIZED_WIRE_9;
-wire	SYNTHESIZED_WIRE_10;
-wire	SYNTHESIZED_WIRE_11;
-wire	[7:0] SYNTHESIZED_WIRE_12;
+wire	SYNTHESIZED_WIRE_9;
+wire	[7:0] SYNTHESIZED_WIRE_10;
 
 assign	full_first_fifo = SYNTHESIZED_WIRE_2;
 assign	empty_first_fifo = SYNTHESIZED_WIRE_0;
@@ -80,50 +78,46 @@ uart_rx	b2v_inst(
 	.clk(CLK),
 	.rstn(RSTN),
 	.rxvalid(rxvalid),
-	.rxdata(SYNTHESIZED_WIRE_9));
+	.rxdata(SYNTHESIZED_WIRE_7));
 	defparam	b2v_inst.BAUD_RATE = 9600;
 	defparam	b2v_inst.CLK_FREQ = 100000000;
 	defparam	b2v_inst.DATA_WIDTH = 8;
 
-assign	1st_not_empty =  ~SYNTHESIZED_WIRE_0;
+assign	first_not_empty =  ~SYNTHESIZED_WIRE_0;
 
-assign	2nd_not_empty =  ~SYNTHESIZED_WIRE_1;
+assign	second_not_empty =  ~SYNTHESIZED_WIRE_1;
 
-assign	1st_not_full =  ~SYNTHESIZED_WIRE_2;
+assign	first_not_full =  ~SYNTHESIZED_WIRE_2;
 
-assign	SYNTHESIZED_WIRE_8 = rxvalid & 1st_not_full;
+assign	SYNTHESIZED_WIRE_6 = rxvalid & first_not_full;
 
-assign	SYNTHESIZED_WIRE_11 = SYNTHESIZED_WIRE_3 & 1st_not_empty & from_1st_to_2nd & 2nd_not_full;
+assign	SYNTHESIZED_WIRE_5 = first_not_empty & second_not_full & from_first_to_second;
 
-assign	SYNTHESIZED_WIRE_7 = 1st_not_empty & 2nd_not_full & from_1st_to_2nd;
-
-assign	SYNTHESIZED_WIRE_10 = from_2nd_to_PC & 2nd_not_empty & tx_ready;
+assign	SYNTHESIZED_WIRE_8 = from_second_to_PC & second_not_empty & tx_ready;
 
 
 uart_tx	b2v_inst2(
-	.txvalid(SYNTHESIZED_WIRE_4),
+	.txvalid(SYNTHESIZED_WIRE_3),
 	.clk(CLK),
 	.rstn(RSTN),
-	.txdata(SYNTHESIZED_WIRE_5),
+	.txdata(SYNTHESIZED_WIRE_4),
 	.txsig(TXSIG),
 	.txready(tx_ready));
 	defparam	b2v_inst2.BAUD_RATE = 9600;
 	defparam	b2v_inst2.CLK_FREQ = 100000000;
 	defparam	b2v_inst2.DATA_WIDTH = 8;
 
-assign	SYNTHESIZED_WIRE_4 = tx_ready & from_2nd_to_PC & SYNTHESIZED_WIRE_6 & 2nd_not_empty;
-
 
 fifo	b2v_inst3(
 	.i_clk(CLK),
 	.i_rst(rst),
-	.i_rd_en(SYNTHESIZED_WIRE_7),
-	.i_wr_en(SYNTHESIZED_WIRE_8),
-	.i_data(SYNTHESIZED_WIRE_9),
-	.o_dv(SYNTHESIZED_WIRE_3),
+	.i_rd_en(SYNTHESIZED_WIRE_5),
+	.i_wr_en(SYNTHESIZED_WIRE_6),
+	.i_data(SYNTHESIZED_WIRE_7),
+	.o_dv(SYNTHESIZED_WIRE_9),
 	.o_full(SYNTHESIZED_WIRE_2),
 	.o_empty(SYNTHESIZED_WIRE_0),
-	.o_data(SYNTHESIZED_WIRE_12));
+	.o_data(SYNTHESIZED_WIRE_10));
 	defparam	b2v_inst3.DATA_WIDTH = 8;
 	defparam	b2v_inst3.DEPTH = 64;
 
@@ -134,18 +128,18 @@ assign	rst =  ~RSTN;
 fifo	b2v_inst7(
 	.i_clk(CLK),
 	.i_rst(rst),
-	.i_rd_en(SYNTHESIZED_WIRE_10),
-	.i_wr_en(SYNTHESIZED_WIRE_11),
-	.i_data(SYNTHESIZED_WIRE_12),
-	.o_dv(SYNTHESIZED_WIRE_6),
-	.o_full(2nd_not_full),
+	.i_rd_en(SYNTHESIZED_WIRE_8),
+	.i_wr_en(SYNTHESIZED_WIRE_9),
+	.i_data(SYNTHESIZED_WIRE_10),
+	.o_dv(SYNTHESIZED_WIRE_3),
+	.o_full(second_not_full),
 	.o_empty(SYNTHESIZED_WIRE_1),
-	.o_data(SYNTHESIZED_WIRE_5));
+	.o_data(SYNTHESIZED_WIRE_4));
 	defparam	b2v_inst7.DATA_WIDTH = 8;
 	defparam	b2v_inst7.DEPTH = 64;
 
 
-assign	full_second_fifo = 2nd_not_full;
+assign	full_second_fifo = second_not_full;
 assign	rx_valid = rxvalid;
 assign	un = 1;
 assign	zero = 0;
