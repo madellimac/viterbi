@@ -22,16 +22,16 @@ class viterbi_serial(Py_Module):
         return 0
 
 
-def __init__(self, K, N):
-    self.N = N
-    self.K = K
-    # self.ser = serial.Serial('/dev/ttyUSB1', 9600, bytesize=serial.SIXBITS)
-    Py_Module.__init__(self)  # Call the aff3ct Py_Module __init__
-    self.name = "viterbi_serial"  # Set your module's name
-    t_send = self.create_task("send")  # create a task for your module
-    t_receive = self.create_receive("receive")  # create a task for your module
-    s_r_in = self.create_socket_in(t_send, "r_in", N, np.float32)
-    s_r_out = self.create_socket_out(t_receive, "r_out", N - 6 * K, np.int32)
+    def __init__(self, K, N):
+        self.N = N
+        self.K = K
+        # self.ser = serial.Serial('/dev/ttyUSB1', 9600, bytesize=serial.SIXBITS)
+        Py_Module.__init__(self)  # Call the aff3ct Py_Module __init__
+        self.name = "viterbi_serial"  # Set your module's name
+        t_send = self.create_task("send")  # create a task for your module
+        t_receive = self.create_task("receive")  # create a task for your module
+        s_r_in = self.create_socket_in(t_send, "r_in", N, np.float32)
+        s_r_out = self.create_socket_out(t_receive, "r_out", N - 6 * K, np.int32)
 
-    self.create_codelet(t_send, lambda slf, lsk, fid: slf.send(lsk[s_r_in]))  # create codelet
-    self.create_codelet(t_receive, lambda slf, lsk, fid: slf.receive(lsk[s_r_out]))
+        self.create_codelet(t_send, lambda slf, lsk, fid: slf.send(lsk[s_r_in]))  # create codelet
+        self.create_codelet(t_receive, lambda slf, lsk, fid: slf.receive(lsk[s_r_out]))
