@@ -15,7 +15,7 @@
 
 // PROGRAM		"Quartus Prime"
 // VERSION		"Version 22.1std.2 Build 922 07/20/2023 SC Lite Edition"
-// CREATED		"Tue Dec 19 15:39:50 2023"
+// CREATED		"Tue Dec 19 17:26:09 2023"
 
 module uart_test(
 	CLK,
@@ -46,9 +46,11 @@ output wire	empty_second_fifo;
 output wire	rx_valid;
 output wire	first_i_rd_en;
 
+wire	dv_first;
 wire	first_i_rd_en_ALTERA_SYNTHESIZED;
 wire	first_not_empty;
 wire	first_not_full;
+wire	[7:0] out_first;
 wire	rst;
 wire	rxvalid;
 wire	second_not_empty;
@@ -121,10 +123,10 @@ fifo	b2v_inst3(
 	.i_rd_en(first_i_rd_en_ALTERA_SYNTHESIZED),
 	.i_wr_en(SYNTHESIZED_WIRE_7),
 	.i_data(SYNTHESIZED_WIRE_8),
-	.o_dv(SYNTHESIZED_WIRE_10),
+	.o_dv(dv_first),
 	.o_full(SYNTHESIZED_WIRE_3),
 	.o_empty(SYNTHESIZED_WIRE_1),
-	.o_data(SYNTHESIZED_WIRE_11));
+	.o_data(out_first));
 	defparam	b2v_inst3.DATA_WIDTH = 8;
 	defparam	b2v_inst3.DEPTH = 64;
 
@@ -154,6 +156,16 @@ fifo	b2v_inst7(
 	defparam	b2v_inst7.DATA_WIDTH = 8;
 	defparam	b2v_inst7.DEPTH = 64;
 
+
+
+concatenation	b2v_inst9(
+	.clk(CLK),
+	.rst(rst),
+	.data_un_bit(out_first[0]),
+	.enable_concat(dv_first),
+	.ready(SYNTHESIZED_WIRE_10),
+	.out(SYNTHESIZED_WIRE_11));
+	defparam	b2v_inst9.DATA_WIDTH = 8;
 
 assign	rx_valid = rxvalid;
 assign	first_i_rd_en = first_i_rd_en_ALTERA_SYNTHESIZED;
