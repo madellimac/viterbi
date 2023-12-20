@@ -29,11 +29,15 @@ add wave -noupdate -radix unsigned /tb_top_level/uut/dec/SMU/acs0/MB0
 add wave -noupdate -radix unsigned /tb_top_level/uut/dec/SMU/acs0/MN0
 add wave -noupdate -radix unsigned /tb_top_level/uut/dec/SMU/acs0/MB1
 add wave -noupdate -radix unsigned /tb_top_level/uut/dec/SMU/acs0/MN1
-add wave -noupdate -radix unsigned /tb_top_level/uut/dec/SMU/acs0/MN_out
 add wave -noupdate -radix unsigned /tb_top_level/uut/dec/SMU/acs0/decision
 add wave -noupdate -radix unsigned /tb_top_level/uut/dec/SMU/acs0/MN_0_new
 add wave -noupdate -radix unsigned /tb_top_level/uut/dec/SMU/acs0/MN_1_new
-add wave -noupdate -radix unsigned /tb_top_level/uut/dec/SMU/acs0/next_MN
+add wave -noupdate -divider survivor
+add wave -noupdate /tb_top_level/uut/dec/survivor_path_unit_0/rst
+add wave -noupdate /tb_top_level/uut/dec/survivor_path_unit_0/clk
+add wave -noupdate /tb_top_level/uut/dec/survivor_path_unit_0/enable
+add wave -noupdate /tb_top_level/uut/dec/survivor_path_unit_0/data_in
+add wave -noupdate /tb_top_level/uut/dec/survivor_path_unit_0/data_out
 TreeUpdate [SetDefaultTree]
 WaveRestoreCursors {{Cursor 1} {336559 ps} 0}
 quietly wave cursor active 1

@@ -9,7 +9,7 @@
 ----------------------------------------------------------------------------------
 library ieee;
 use ieee.std_logic_1164.all;
-use ieee.std_logic_unsigned.all;
+use ieee.numeric_std.all;
 
 entity branch_metric_unit is
 	port(	rst : in std_logic;
@@ -64,16 +64,16 @@ architecture Behavioral of branch_metric_unit is
 											"0111","0110","0101","0100","0011","0010","0001","0000");
 
 	signal address : std_logic_vector(5 downto 0);
-	signal rMB00, rMB01, rMB10, rMB11 : std_logic_vector(3 downto 0);
+	--signal rMB00, rMB01, rMB10, rMB11 : std_logic_vector(3 downto 0);
 	
 begin
 
 address <= y2&y1;
 
-    rMB00 <= ROM_MB00(conv_integer(address));
-    rMB01 <= ROM_MB01(conv_integer(address));
-    rMB10 <= ROM_MB10(conv_integer(address));
-    rMB11 <= ROM_MB11(conv_integer(address));
+    --rMB00 <= ROM_MB00(conv_integer(address));
+    --rMB01 <= ROM_MB01(conv_integer(address));
+    --rMB10 <= ROM_MB10(conv_integer(address));
+    --rMB11 <= ROM_MB11(conv_integer(address));
 
     process (rst,CLK)
     begin
@@ -84,10 +84,14 @@ address <= y2&y1;
 				MB11 <= (others => '0');
 		  elsif (CLK'event and CLK = '1') then
             if (enable = '1') then
-                MB00 <= rMB00;
-					 MB01 <= rMB01;
-					 MB10 <= rMB10;
-					 MB11 <= rMB11;					 
+                --MB00 <= rMB00;
+					 --MB01 <= rMB01;
+					 --MB10 <= rMB10;
+					 --MB11 <= rMB11;		
+			MB00 <= std_logic_vector(unsigned('0'&y1) + unsigned('0'&y2)); 
+			MB01 <= std_logic_vector(unsigned('0'&y1) + to_unsigned(7,4) - unsigned('0'&y2)); 
+			MB10 <= std_logic_vector(to_unsigned(7,4) - unsigned('0'&y1) + unsigned('0'&y2));
+			MB11 <= std_logic_vector(to_unsigned(7,4) - unsigned('0'&y1) + to_unsigned(7,4) - unsigned('0'&y2));
             end if;
         end if;
     end process;

@@ -1,2 +1,5 @@
 /HW/SV/project*
 /HW/.DS_Store
+*.mpf
+*.mti
+*.wlf

@@ -75,6 +75,6 @@ BEGIN
 	rst <= '1', '0' after 112 ns;
 	enable <= '1' after 154 ns;
 	init_lfsr <= '1', '0' after 142 ns;
-	snr <= "011000";
+	snr <= "010100";
 
 END;
