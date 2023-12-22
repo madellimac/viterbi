@@ -42,7 +42,7 @@ module ACS(
 
     // sorting network
     CS cs_0(.A(MN_0_new), .idx_A({rnk_0, dec_0}), .B(MN_1_new), .idx_B({rnk_0, dec_1}), .min(m_01), .idx_min({rnk_m_01, dec_m_01}), .max(M_01), .idx_max({rnk_M_01, dec_M_01}));
-    CS cs_1(.A(MN_2_new), .idx_A({rnk_1, dec_0}), .B(MN_3_new), .idx_B({rnk_1, dec_1}), .min(m_23), .idx_min({rnk_m_23, dec_m_23}), .max(M_23), .idx_max({rnk_M_23, dec_M_23}));
+    CS cs_1(.A(MN_2_new), .idx_A({rnk_2, dec_0}), .B(MN_3_new), .idx_B({rnk_3, dec_1}), .min(m_23), .idx_min({rnk_m_23, dec_m_23}), .max(M_23), .idx_max({rnk_M_23, dec_M_23}));
     CS cs_2(.A(m_01), .idx_A({rnk_m_01, dec_m_01}), .B(m_23), .idx_B({rnk_m_23, dec_m_23}), .min(next_M_min), .idx_min({rank, decision}), .max(mM_0123), .idx_max({rnk_mM_0123, dec_mM_0123}));
     CS cs_3(.A(M_01), .idx_A({rnk_M_01, dec_M_01}), .B(M_23), .idx_B({rnk_M_23, dec_M_23}), .min(Mm_0123), .idx_min({rnk_Mm_0123, dec_Mm_0123}), .max(MM_0123), .idx_max({rnk_MM_0123, dec_MM_0123}));
     CS cs_4(.A(mM_0123), .idx_A({rnk_mM_0123, dec_mM_0123}), .B(Mm_0123), .idx_B({rnk_Mm_0123, dec_Mm_0123}), .min(next_M_min_2), .idx_min({rank_2, decision_2}), .max(next_M_min_3), .idx_max({rank_3, decicion_3}));
