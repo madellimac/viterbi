@@ -4,10 +4,11 @@ module survivor_path
     (input  logic         rst,
      input  logic         clk,
      input  logic         enable,
-     input  logic [7 : 0] data_in,
-     output logic [7 : 0] data_out);
+     input  logic [0:15] data_in,
+     input  logic [0:15] rank,
+     output logic [0:15] data_out);
 
-logic [7:0] st0_out, st1_out, st2_out, st3_out, st4_out, st5_out, st6_out, st7_out, st8_out, st9_out, st10_out, st11_out, st12_out, st13_out, st14_out, st15_out, st16_out, st17_out, st18_out, st19_out;
+logic [0:7] st0_out, st1_out, st2_out, st3_out, st4_out, st5_out, st6_out, st7_out, st8_out, st9_out, st10_out, st11_out, st12_out, st13_out, st14_out, st15_out, st16_out, st17_out, st18_out, st19_out;
 
 survivor_path_stage stage_0(.data_in(data_in),   .decision(data_in), .data_out(st0_out), .*);
 survivor_path_stage stage_1(.data_in(st0_out),   .decision(data_in), .data_out(st1_out), .*);
@@ -31,5 +32,4 @@ survivor_path_stage stage_18(.data_in(st17_out), .decision(data_in), .data_out(s
 survivor_path_stage stage_19(.data_in(st18_out), .decision(data_in), .data_out(data_out), .*);
 
 endmodule
-
 

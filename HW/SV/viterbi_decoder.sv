@@ -11,9 +11,11 @@ module viterbi_decoder(
 	);
 
 logic enable_dly1, enable_dly2, enable_dly3, enable_dly4;
-logic [3:0] branch_metric [3:0];
-logic [7:0] final_decision;
-logic [15:0] decision;
+logic [3:0] branch_metric [0:3];
+logic [0:7] final_decision, final_decision2;
+logic [0:15] decision;
+logic [0:15] rank;
+
 logic [3:0] MB00, MB01, MB10, MB11;
 
 always_ff @(posedge clk, posedge rst)
@@ -52,14 +54,18 @@ state_metric_unit SMU ( .rst(rst),
 	                    .clk(clk),
 	                    .enable(enable_dly3),
 	                    .branch_metric(branch_metric),
-	                    .decision(decision));
+	                    .decision(decision),
+	                    .rank(rank));
 	
 survivor_path survivor_path_unit_0 (.rst(rst),
                                     .clk(clk),
                                     .enable(enable_dly3),
-                                    .data_in(decision[7:0]),
-                                    .data_out(final_decision));
-	
+                                    .data_in(decision[0:7]),
+                                    .rank(rank),
+                                    .data_out(final_decision[0:7]));
+
+assign path_diff = final_decision[0]  ^  final_decision2[0];   
+                               	
 assign decoded_bit = final_decision[0];
 
 endmodule

@@ -5,12 +5,12 @@ module survivor_path_stage
     (input  logic         rst,
      input  logic         clk,
      input  logic         enable,
-     input  logic [7 : 0] data_in,
-     input  logic [7 : 0] decision,
-     output logic [7 : 0] data_out);
+     input  logic [0:7] data_in,
+     input  logic [0:7] decision,
+     output logic [0:7] data_out);
     
 
-	logic [7:0] reg_data;
+	logic [0:7] reg_data;
 
 	always_ff @(posedge clk, posedge rst)
 	begin
