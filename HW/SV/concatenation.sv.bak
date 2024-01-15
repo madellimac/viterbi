@@ -27,8 +27,6 @@ module concatenation #(parameter DATA_WIDTH = 8)(
 						cnt=cnt+1;
 						ready=0;
 					end   
-				end else begin
-					ready=0;
 				end
         end
 	end
