@@ -18,7 +18,9 @@ entity viterbi_decoder is
 			enable : in std_logic;
 			y1 : in std_logic_vector(2 downto 0);
 			y2 : in std_logic_vector(2 downto 0);
-			decoded_bit : out std_logic);
+			decoded_bit : out std_logic;
+			data_valid  : out std_logic
+	);
 end viterbi_decoder;
 
 architecture Behavioral of viterbi_decoder is
@@ -32,7 +34,8 @@ component branch_metric_unit is
 			MB00 : out std_logic_vector(3 downto 0);
 			MB01 : out std_logic_vector(3 downto 0);
 			MB10 : out std_logic_vector(3 downto 0);
-			MB11 : out std_logic_vector(3 downto 0));
+			MB11 : out std_logic_vector(3 downto 0)
+	);
 end component;
 
 component state_metric_unit is
@@ -40,7 +43,8 @@ component state_metric_unit is
 			clk : in std_logic;
 			enable : in std_logic;
 			branch_metric : in branch_metric_array;
-			decision : out std_logic_vector(7 downto 0));
+			decision : out std_logic_vector(7 downto 0)
+	);
 end component;
 
 component survivor_path is
@@ -48,7 +52,8 @@ component survivor_path is
 			clk : in std_logic;
 			enable : in std_logic;
 			data_in : in std_logic_vector(7 downto 0);
-			data_out : out std_logic_vector(7 downto 0));
+			data_out : out std_logic_vector(7 downto 0)
+	);
 end component;
 
 signal MB00, MB01, MB10, MB11 : std_logic_vector(3 downto 0);
@@ -66,13 +71,16 @@ begin
 				enable_dly2 <= '0';
 				enable_dly3 <= '0';
 				enable_dly4 <= '0';
+				--data_valid  <= '0';
 		  elsif (CLK'event and CLK = '1') then            
             enable_dly1 <= enable;            
 				enable_dly2 <= enable_dly1;
 				enable_dly3 <= enable_dly2;
 				enable_dly4 <= enable_dly3;
+				--data_valid <= enable_dly4;
         end if;
     end process;
+    data_valid <= enable_dly4;
 	 
 BMU : branch_metric_unit
 	port map(rst,
