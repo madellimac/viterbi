@@ -5,20 +5,25 @@ from py_aff3ct.module.py_module import Py_Module
 
 class viterbi_serial(Py_Module):
     def send(self, r_in):
-        ser = serial.Serial('/dev/ttyUSB1', 9600, bytesize=serial.SIXBITS)
-        for i in range(0, 2 * self.N, 2):
-            tmp1 = int(r_in[i]) + 3
-            tmp2 = int(r_in[i + 1]) + 3
-            tmp = tmp1 + (tmp2 << 3)
-            ser.write(tmp.to_bytes(1, byteorder='big', signed=False))
-
+        #ser = serial.Serial('/dev/ttyUSB1', 9600, bytesize=serial.SIXBITS)
+        print("début")
+        for i in range(0, self.N, 2):
+            #tmp1 = int(r_in[0,i]) + 3
+            #tmp2 = int(r_in[0,i + 1]) + 3
+            tmp1 = int(((3-r_in[0, i])/2)*7/3)
+            tmp2 = int(((3-r_in[0, i + 1])/2)*7/3)
+            tmp = tmp2 + (tmp1 << 3)
+            print(f'{tmp:06b}')#bin(tmp))
+            #ser.write(tmp.to_bytes(1, byteorder='big', signed=False))
+        print("fin")
         return 0
 
     def receive(self, r_out):
-        ser = serial.Serial('/dev/ttyUSB1', 9600)
+        #ser = serial.Serial('/dev/ttyUSB1', 9600)
         for i in range(0, self.N - 6 * self.K):
-            ser.read(r_out[i])
-            print(r_out)
+            #ser.read(r_out[i])
+            #print(r_out)
+            print("OK")
         return 0
 
 
