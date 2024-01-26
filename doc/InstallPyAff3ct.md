@@ -24,7 +24,7 @@ git clone https://github.com/aff3ct/py_aff3ct.git && cd py_aff3ct
 git submodule update --init --recursive
 ```
 
-La libraire `aff3ct` doit ensuite être compilée, en cas d'erreur, suivre les indications [suivantes](mettre-url-correct) :
+La libraire `aff3ct` doit ensuite être compilée, en cas d'erreur, suivre les indications [suivantes](#en-cas-derreur-%C3%A0-la-compilation) :
 
 ```bash
 cd lib/aff3ct
@@ -75,7 +75,7 @@ cd ../examples/full_python
 python3 test.py
 ```
 
-#### En cas d'erreur à la compilation
+### En cas d'erreur à la compilation
 Sur certains systèmes, la compilation échoue. L'un des problèmes les plus courants provient d'une erreur sur les types `uintx_t` qui ne sont pas reconnus par le compilateur. Afin de résoudre le problème, ajoutez la ligne suivante dans les fichiers `lib/aff3ct/src/Tools/Perf/Transpose/transpose_selector.cpp` et `lib/aff3ct/lib/cli/src/Types/File_system/File_system.hpp` :
 
     #include <stdint>
