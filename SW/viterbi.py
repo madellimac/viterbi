@@ -1,27 +1,28 @@
-import sys
 import py_aff3ct as aff3ct
-from py_aff3ct.module.py_module import Py_Module
 
 from conv_encoder import conv_encoder
 from viterbi_decoder import viterbi_decoder
 from quantizer import quantizer
 from viterbi_splitter import viterbi_splitter
-from viterbi_serial import viterbi_serial
 
 import numpy as np
 import math
 import time
 import matplotlib.pyplot as plt
 
-K = 10
-N = 2*K
-A = 4   # Longueur de contrainte (K)
+'''
+Voir SOFTWARE_PROGRAM.md dans doc pour des explications sur le programme.
+'''
+
+K = 100 # Longueur du message
+N = 2*K # Longueur du message encodé
+A = 4   # Longueur de contrainte
 B = 6*A # Longueur max de convergence
-C = 2*B
+C = 2*B # Longueur max de convergence encodé
 
 ebn0_min = 0
-ebn0_max = 6
-ebn0_step = 0.2
+ebn0_max = 3
+ebn0_step = 0.5
 
 ebn0 = np.arange(ebn0_min, ebn0_max, ebn0_step)
 esn0 = ebn0 + 10 * math.log10((K + B)/(N + C))
@@ -41,11 +42,7 @@ mnt = aff3ct.module.monitor.Monitor_BFER_AR(K, 50)
 src_trunc = viterbi_splitter(A, K + B)
 dec_trunc = viterbi_splitter(A, K + B)
 
-vit_serial = viterbi_serial(A, N + C)
-
 sigma = np.ndarray(shape = (1,1),  dtype = np.float32)
-# sigma[:] = sigma_vals
-# print(sigma)
 chn["add_noise ::CP"].bind(sigma)
 mdm["demodulate::CP"].bind(sigma)
 qtz["quantize  ::cp"].bind(sigma)
@@ -56,7 +53,6 @@ mdm    ["modulate   ::X_N2  "] = chn     ["add_noise    :: X_N  "]
 chn    ["add_noise  ::Y_N   "] = mdm     ["demodulate   :: Y_N1 "]
 mdm    ["demodulate ::Y_N2  "] = qtz     ["quantize     :: r_in "]
 qtz    ["quantize   ::r_out "] = vit_dec ["decode       :: r_in "]
-qtz    ["quantize   ::r_out "] = vit_serial ["send         :: r_in "]
 
 src      ['generate::U_K'] = src_trunc['split::r_in']
 src_trunc['split::r_out']  = mnt      ['check_errors::U']
@@ -87,7 +83,6 @@ for i in range(len(sigma_vals)):
         mdm["demodulate"].exec()
         qtz["quantize"].exec()
         vit_dec["decode"].exec()
-        #vit_serial["send"].exec()
         mnt["check_errors"].exec()
         src_trunc['split'].exec()
         dec_trunc['split'].exec()
@@ -112,33 +107,3 @@ plt.grid()
 plt.semilogy(ebn0, fer, 'r-', ebn0, ber, 'b--')
 plt.show()
 
-#src["generate"].exec()
-#cc_enc["encode"].exec()
-#mdm["modulate"].exec()
-#chn["add_noise"].exec()
-#mdm["demodulate"].exec()
-#qtz["quantize"].exec()
-#vit_dec["decode"].exec()
-#vit_serial["send"].exec()
-#mnt["check_errors"].exec()
-#src_trunc['split'].exec()
-#dec_trunc['split'].exec()
-
-print("src = ", src    ["generate   ::U_K   "][:])
-# print("enc out = ", cc_enc ["encode     ::r_out "][:])
-# print("mod out = ", mdm    ["modulate   ::X_N2  "][:])
-# print("chn out = ", chn    ["add_noise  ::Y_N   "][:])
-# print("demod out = ", mdm    ["demodulate ::Y_N2  "][:])
-# print("qtz in = ", qtz    ["quantize ::r_in  "][:])
-# print("qtz out = ", qtz    ["quantize ::r_out  "][:])
-# print("dec in = ", vit_dec["decode     ::r_in "][:])
-print("dec out = ", vit_dec["decode     ::r_out "][:])
-#seq  = aff3ct.tools.sequence.Sequence(src["generate"], mdm["modulate"], 1)
-
-
-# print("src trunc     = ", src_trunc)
-# print("dec out trunc = ", r_out_trunc)
-#seq.exec()
-
-#bits = cc_enc['encode::r_out'][:]
-#print("bits = ", bits)

@@ -9,6 +9,10 @@ from viterbi_serial_test import viterbi_serial
 import numpy as np
 import math
 
+'''
+Voir SOFTWARE_PROGRAM.md dans doc pour des explications sur le programme.
+'''
+
 K = 10
 N = 2*K
 A = 4   # Longueur de contrainte (K)
@@ -70,9 +74,10 @@ vit_serial["send"].exec()
 src_trunc['split'].exec()
 dec_trunc['split'].exec()
 
-print("src = ", src_array[:])
-print("qtz in = ", qtz    ["quantize ::r_in  "][:])
-print("qtz out = ", qtz    ["quantize ::r_out  "][:])
-print("dec out = ", vit_dec["decode     ::r_out "][:])
+print("src = ",           src_array[:])
+print("qtz in = ",        qtz    ["quantize ::r_in  "][:])
+print("qtz out = ",       qtz    ["quantize ::r_out  "][:])
+print("dec out = ",       vit_dec["decode     ::r_out "][:])
 print("src trunc     = ", src_trunc['split::r_out'][:])
 print("dec out trunc = ", dec_trunc['split::r_out'][:])
+

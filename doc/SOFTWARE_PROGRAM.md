@@ -36,3 +36,6 @@ Ce programme est un simple programme de test d'envoi et réception de données v
 Un message connu est généré avant d'être envoyé à l'encodeur logiciel et matérielle via liaison série. 
 
 Ce programme n'a jamais pu être correctement testé et ne fonctionne certainement pas comme attendu avec la carte FPGA. L'idée était de vérifier une première fois manuellement la cohérence des valeurs au sein du FPGA et les valeurs du décodeur logiciel.
+
+### serial
+Simple script Python utilisé pour tester la communication UART et les FIFOs de la carte FPGA.

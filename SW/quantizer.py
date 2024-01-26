@@ -1,10 +1,9 @@
-import sys
-
-sys.path.insert(0, '../pyaf/py_aff3ct/build/lib')
 import numpy as np
-import py_aff3ct as aff3ct
 from py_aff3ct.module.py_module import Py_Module
 
+''' 
+Module permettant la quantification des données après démodulation.
+'''
 
 class quantizer(Py_Module):
 
@@ -23,5 +22,4 @@ class quantizer(Py_Module):
         s_r_in = self.create_socket_in(t_quantize, "r_in", N, np.float32)  # create an input socket for the task
         s_r_out = self.create_socket_out(t_quantize, "r_out", N, np.float32)  # create an output socket for the task
 
-        self.create_codelet(t_quantize,
-                            lambda slf, lsk, fid: slf.quantize(lsk[s_cp], lsk[s_r_in], lsk[s_r_out]))  # create codelet
+        self.create_codelet(t_quantize, lambda slf, lsk, fid: slf.quantize(lsk[s_cp], lsk[s_r_in], lsk[s_r_out]))  # create codelet

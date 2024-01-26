@@ -2,35 +2,36 @@ import serial
 import numpy as np
 from py_aff3ct.module.py_module import Py_Module
 
+''' 
+Module permettant l'envoi et la réception des données en série depuis la carte FPGA embarquant le décodeur matériel.
+
+
+Ce module n'a jamais pu être correctement testé conjointement avec la carte FPGA et le décodeur matériel.
+Il comporte probablement des erreurs au niveau de la mise en forme des signatures à envoyer.
+'''
 
 class viterbi_serial(Py_Module):
     def send(self, r_in):
-        #ser = serial.Serial('/dev/ttyUSB1', 9600, bytesize=serial.SIXBITS)
+        ser = serial.Serial('/dev/ttyUSB1', 9600, bytesize=serial.EIGHTBITS)
         print("début")
         for i in range(0, self.N, 2):
-            #tmp1 = int(r_in[0,i]) + 3
-            #tmp2 = int(r_in[0,i + 1]) + 3
             tmp1 = int(((3-r_in[0, i])/2)*7/3)
             tmp2 = int(((3-r_in[0, i + 1])/2)*7/3)
-            tmp = tmp2 + (tmp1 << 3)
-            print(f'{tmp:06b}')#bin(tmp))
-            #ser.write(tmp.to_bytes(1, byteorder='big', signed=False))
-        print("fin")
+            tmp = (tmp2<<2) + (tmp1 << 5) # Vérifier si les bits inutiles sont bien les deux de poids faibles
+            print(f'{tmp:06b}')
+            ser.write(tmp.to_bytes(1, byteorder='big', signed=False))
         return 0
 
     def receive(self, r_out):
-        #ser = serial.Serial('/dev/ttyUSB1', 9600)
+        ser = serial.Serial('/dev/ttyUSB1', 9600, bytesize=1)
         for i in range(0, self.N - 6 * self.K):
-            #ser.read(r_out[i])
-            #print(r_out)
-            print("OK")
+            r_out[i] = ser.read()
         return 0
 
 
     def __init__(self, K, N):
         self.N = N
         self.K = K
-        # self.ser = serial.Serial('/dev/ttyUSB1', 9600, bytesize=serial.SIXBITS)
         Py_Module.__init__(self)  # Call the aff3ct Py_Module __init__
         self.name = "viterbi_serial"  # Set your module's name
         t_send = self.create_task("send")  # create a task for your module
@@ -40,3 +41,4 @@ class viterbi_serial(Py_Module):
 
         self.create_codelet(t_send, lambda slf, lsk, fid: slf.send(lsk[s_r_in]))  # create codelet
         self.create_codelet(t_receive, lambda slf, lsk, fid: slf.receive(lsk[s_r_out]))
+
