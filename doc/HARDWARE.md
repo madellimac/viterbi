@@ -1,7 +1,7 @@
-# Création des projets Vivado
+# Partie matérielle
 
-### Projet de test de la communication UART
-#### Créer le projet Vivado
+## Projet de test de la communication UART
+### Créer le projet Vivado
 À l’aide du logiciel Vivado, créer un nouveau projet avec les fichier suivants :
 - `concatenation.sv`
 - `uart_tx.sv`
@@ -24,7 +24,7 @@ Générer le bitmap.
 
 Programmer la carte.
 
-#### Envoyer des données à la carte
+### Envoyer des données à la carte
 Ouvrir le script Python `script.py` et le modifier au besoin.
 
 Lancer le script pour l'envoi des données :
@@ -33,8 +33,8 @@ Lancer le script pour l'envoi des données :
 python3 script.py
 ```
 
-### Projet de décodage Viterbi
-#### Créer le projet Vivado
+## Projet de décodage Viterbi
+### Créer le projet Vivado
 Pour utiliser l'architecture matérielle, il est nécessaire de créer un projet Vivado associé. Cette partie a été testée sur carte Nexys-A7 et sur la version de Vivado installée sur les machines de l'école (2019 ?).
 
 Pour cela, créer un "Projet RTL" et importer les fichiers suivants :
@@ -58,7 +58,7 @@ Il reste le fichier de contraintes à ajouter : nous fournissons celui pour la c
 
 Il est alors possible de générer le bitstream et de le mettre sur la carte.
 
-#### Communication avec l'implémentation matérielle
+### Communication avec l'implémentation matérielle
 
 La communication avec l'implémentation matérielle du décodeur Viterbi se fait en RS232 et sa configuration 8N1 à 115200 bauds.
 

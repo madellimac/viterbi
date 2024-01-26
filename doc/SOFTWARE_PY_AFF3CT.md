@@ -1,9 +1,9 @@
 # Installation de la librairie py_aff3ct
 
-### Informations générales
-Les commandes fournies dans ce document peuvent varier d'une distribution Linux à une autre. Il convient d'utiliser les commandes adaptées à votre distribution (remplacer `apt` par `dnf` par exemple). `py_aff3ct` peut également être installé sur MacOS et aussi sur Windows par l'intermédiaire de MinGW, sur ces plateformes l'installation peut être différente de celle présentée ici. 
+## Informations générales
+Les commandes fournies dans ce document peuvent varier d'une distribution Linux à une autre. Il convient d'utiliser les commandes adaptées à votre distribution (remplacer `apt` par `dnf` par exemple). `py_aff3ct` peut également être installé sur MacOS et aussi sur Windows par l'intermédiaire de MinGW, sur ces plateformes l'installation peut être différente de celle présentée ici.
 
-### Prérequis
+## Prérequis
 Python est nécessaire pour pouvoir installer et utiliser `py_aff3ct`, la première étape consiste à installer Python sur votre machine ainsi qu'un gestionnaire de paquets Python. Le générateur de documentation logicielle Doxygen est aussi nécessaire :
 
 ```bash
@@ -48,7 +48,7 @@ Retournez maintenant dans la racine du projet Git :
 cd ../../../..
 ```
 
-### Compilation de py_aff3ct
+## Compilation de py_aff3ct
 Dans un premier temps, copiez les fichiers de configuration `CMake` du build `aff3ct` :
 
 ```bash
@@ -75,8 +75,10 @@ cd ../examples/full_python
 python3 test.py
 ```
 
-### En cas d'erreur à la compilation
+## En cas d'erreur à la compilation
 Sur certains systèmes, la compilation échoue. L'un des problèmes les plus courants provient d'une erreur sur les types `uintx_t` qui ne sont pas reconnus par le compilateur. Afin de résoudre le problème, ajoutez la ligne suivante dans les fichiers `lib/aff3ct/src/Tools/Perf/Transpose/transpose_selector.cpp` et `lib/aff3ct/lib/cli/src/Types/File_system/File_system.hpp` :
 
-    #include <stdint>
+```c
+#include <stdint>
+```
 
