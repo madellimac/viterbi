@@ -85,7 +85,7 @@ begin
 BMU : branch_metric_unit
 	port map(rst,
 			clk,
-			enable_dly2,
+			enable_dly1,
 			y1,
 			y2,
 			MB00,
@@ -101,12 +101,12 @@ branch_metric(3) <= MB11;
 SMU : state_metric_unit
 	port map(rst,
 	clk,
-	enable_dly3,
+	enable_dly2,
 	branch_metric,
 	decision);
 	
 survivor_path_unit : survivor_path
-	port map(rst, clk, enable_dly3, decision, final_decision);
+	port map(rst, clk, enable_dly4, decision, final_decision);
 	
 	decoded_bit <= final_decision(0);
 	

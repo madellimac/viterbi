@@ -65,3 +65,9 @@ La communication avec l'implémentation matérielle du décodeur Viterbi se fait
 |     Bits      |         0-1         | 2-4  | 5-7  |
 |:-------------:|:-------------------:|:----:|:-----|
 | Signification | Bits de remplissage | `y1` | `y2` |
+
+### Fonctionnalités non implémentées
+
+Actuellement, la partie communication avec la  FIFO et le déocdeur en lui-même restent à fusionner.
+
+De même, le module AFF3CT qui envoie les données au décodeur matériel ne fonctionne pas (voir la doc de la partie logicielle).

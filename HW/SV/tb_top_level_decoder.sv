@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module tb_top_level_decoder();
+ module tb_top_level_decoder();
 
     logic clk;
     logic rstn;
